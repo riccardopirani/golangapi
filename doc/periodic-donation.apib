@@ -1,0 +1,370 @@
+# Group Periodic Donation
+Periodic donation resources of go-api
+
+## Periodic Donation [/v1/periodic-donations/orders/{order}]
+A single Periodic Donation
+The Periodic Donation is the resource in the TWReporter Donation API. 
+It reprensents one periodic donation record identified by the order number(:order).
+
+The Periodic Donation resource has the following attributes;
+- id
+- amount
+- card_info
+- card_info.bind_code
+- card_info.country
+- card_info.country_code
+- card_info.expiry_date
+- card_info.funding
+- card_info.issuer
+- card_info.last_four
+- card_info.level
+- card_info.type
+- cardholder
+- cardholder.address_country
+- cardholder.address_state
+- cardholder.address_city
+- cardholder.address_detail
+- cardholder.address_zip_code
+- cardholder.email
+- cardholder.first_name
+- cardholder.last_name
+- cardholder.security_id
+- cardholder.phone_number
+- cardholder.nickname
+- cardholder.title
+- cardholder.legal_name
+- cardholder.gender
+- cardholder.age_range
+- cardholder.read_preference
+- cardholder.words_for_twreporter
+- currency
+- details
+- frequency
+- order_number
+- pay_method
+- send_receipt
+- to_feedback
+- max_paid_times
+- is_anonymous
+- auto_tax_deduction
+- receipt 
+- receipt.header
+- receipt.security_id
+- receipt.email
+- receipt.address_country
+- receipt.address_state
+- receipt.address_city
+- receipt.address_detail
+- receipt.address_zip_code
+
+The states *id* and *order_number* are assigned by the TWReporter Go API at the moment of creation.
+
+### Retrieve a Single Periodic Donation [GET]
++ Parameters
+    + order (string) ... an order number of a Periodic Donation
+
++ Request
+
+    + Headers 
+
+              Cookie: id_token=<id_token>
+              Authorization: Bearer <jwt>
+
++ Response 200
+
+    + Attributes (PeriodicDonationResponse)
+        
+
++ Response 401 (application/json)
+
+    + Body
+
+            {
+                "status": "fail",
+                "data": {
+                    "req.Headers.Authorization": "JWT is not valid"
+                }
+            }
+
++ Response 403 (application/json)
+
+    + Body
+
+            {
+                "status": "fail",
+                "data": {
+                    "req.Headers.Authorization": "request is not permitted for the resource"
+                }
+            }
+
++ Response 404 (application/json)
+
+    + Body
+
+            {
+                "status": "fail",
+                "data": {
+                    "req.URL": "url can not address a resource"
+                }
+            }
+
++ Response 500 (application/json)
+
+    
+    + Body
+
+            {
+                "status": "error",
+                "message": "unknown error."
+            }
+
+
+### Modify a Single Periodic Donation [PATCH]
++ Parameters
+    + order (string) ... an order number of the Periodic Donation
+
++ Request 
+
+    + Headers
+
+            Content-Type: application/json
+            Cookie: id_token=<id_token>
+            Authorization: Bearer <jwt>
+            
+    + Attributes (object)
+        + donor (object)
+            + address_country: 臺灣
+            + address_state: 臺北市
+            + address_city: 中山區
+            + address_detail: 南京東路一段300巷300號6樓
+            + address_zip_code: 104
+            + email: developer@twreporter.org
+            + first_name: 小明
+            + last_name: 王
+            + phone_number: +886912345678
+            + security_id: A12345678
+            + nickname: 小明
+            + title: 工程師
+            + legal_name: 報導者文化基金會
+            + gender: M  
+            + age_range: 25_to_34  
+            + read_preference: human_right,cross_straits 
+            + words_for_twreporter: 加油！  
+        + send_receipt: no_receipt 
+        + to_feedback: false
+        + user_id: 1 (required)
+        + is_anonymous: true
+        + receipt (object)
+            + header: 王小明
+            + security_id: A12345678
+            + email: developer@twreporter.org
+            + address_country: 臺灣
+            + address_state: 臺北市
+            + address_city: 中山區
+            + address_detail: 南京東路一段300巷300號6樓
+            + address_zip_code: 104
+        + auto_tax_deduction: true
+
++ Response 204
+
++ Response 400 (application/json)
+
+    + Body
+
+            {
+                "status": "fail",
+                "data": {
+                    "donor": {
+                        "email": "email(string) is optional",
+                        "address_country": "address_country(string) is optional",
+                        "address_state": "address_state(string) is optional",
+                        "address_city": "address_city(string) is optional",
+                        "address_detail": "address_detail(string) is optional",
+                        "address_zip_code": "address_zip_code(string) is optional",
+                        "last_name": "last_name(string) is optional",
+                        "first_name": "first_name(string) is optional",
+                        "phone_number": "phone_number(string) is optional",
+                        "security_id": "security_id(string) is optional"
+                        "nickname": "nickname(string) is optional",
+                        "title": "title(string) is optional",
+                        "legal_name": "legal_name(string) is optional",
+                        "gender": "gender(string) is optional. only support 'F', 'M', 'X', 'U'",
+                        "age_range": "age_range(string) is optional",
+                        "read_preference": "read_preference(string) is optional",
+                        "words_for_twreporter": "words_for_twreporter(string) is optional",
+                    },
+                    "send_receipt": "send_receipt(string) is optional. only support 'no_receipt', 'digital_receipt_by_month' and 'digital_receipt_by_year', 'paperback_receipt_by_month', 'paperback_receipt_by_year'",
+                    "to_feedback": "to_feedback(bool) is optional.",
+                    "is_anonymous": "is_anonymous(bool) is optional.",
+                    "user_id": "user_id(number) is required",
+                    "receipt": {
+                        "header": "header(string) is optional",
+                        "security_id": "security_id(string) is optional",
+                        "email": "email(string) is optional",
+                        "address_country": "address_country(string) is optional",
+                        "address_state": "address_state(string) is optional",
+                        "address_city": "address_city(string) is optional",
+                        "address_detail": "address_detail(string) is optional",
+                        "address_zip_code": "address_zip_code(string) is optional",
+                    },
+                    "auto_tax_deduction": "auto_tax_deduction(bool) is optional",
+                }
+            }
+
++ Response 401 (application/json)
+
+    + Body
+
+            {
+                "status": "fail",
+                "data": {
+                    "req.Headers.Authorization": "JWT is not valid"
+                }
+            }
+
++ Response 403 (application/json)
+
+    + Body
+
+            {
+                "status": "fail",
+                "data": {
+                    "req.Headers.Authorization": "request is not permitted for the resource"
+                }
+            }
+
++ Response 500 (application/json)
+
+    
+    + Body
+
+            {
+                "status": "error",
+                "message": "unknown error."
+            }
+
+## Periodic Donation [/v1/periodic_donations]
+
+### Create a Single Periodic Donation [POST]
+
++ Request 
+
+    + Headers
+
+            Content-Type: application/merge-patch+json
+            Cookie: id_token=<id_token>
+            Authorization: Bearer <jwt>
+            
+    + Attributes (object)
+        + amount: 500 (required, number)
+        + currency: TWD 
+        + details: 報導者定期定額捐款
+        + donor (required, object)
+            + email: developer@twporter.org (required)
+        + frequency: monthly (required)
+        + prime: `test_3a2fb2b7e892b914a03c95dd4dd5dc7970c908df67a49527c0a648b2bc9` (required)
+        + `merchant_id`: `twreporter_CTBC`
+        + `user_id`: 1 (required, number)
+        + `max_paid_times`: 3 (optional, number)
+
++ Response 201
+
+    + Attributes (PeriodicDonationResponse)
+
++ Response 400 (application/json)
+
+    + Body
+
+            {
+                "status": "fail",
+                "data": {
+                    "prime": "prime(string) is required",
+                    "amount": "amount(number) is required",
+                    "donor": {
+                        "email": "email(string) is required",
+                    },
+                    "details": "details(string) is optional",
+                    "merchant_id": "merchant_id(string) is optional",
+                    "frequency": "frequency(string) is required. Only support 'monthly' and 'yearly'",
+                    "user_id": "user_id(number) is required",
+                    "max_paid_times": "max_paid_times(unsigned number) is optional, default: 2147483647"
+                }
+            }
+
++ Response 401 (application/json)
+
+    + Body
+
+            {
+                "status": "fail",
+                "data": {
+                    "req.Headers.Authorization": "JWT is not valid"
+                }
+            }
+
++ Response 403 (application/json)
+
+    + Body
+
+            {
+                "status": "fail",
+                "data": {
+                    "req.Headers.Authorization": "request is not permitted for the resource"
+                }
+            }
+
++ Response 500 (application/json)
+
+    
+    + Body
+
+            {
+                "status": "error",
+                "message": "unknown error."
+            }
+
+## Data Structures
+
+### PeriodicDonationModel
++ id: 1 (required, number)
++ amount: 500 (required, number)
++ currency: TWD (required)
++ details: 報導者定期定額捐款 (required)
++ frequency: monthly (required)
++ `order_number`: `twreporter-153985253506653918900` (required)
++ `send_receipt`: no_receipt (required)
++ `to_feedback`: true (required, boolean)
++ `is_anonymous`: false (required, boolean)
++ `receipt_header`: 王小明 (optional)
++ `cardholder` (required)
+    + email: developer@twreporter.org (required)
+    + first_name: 小明 (optional)
+    + last_name: 王 (optional)
+    + address_country: 臺灣 (optional)
+    + address_state: 臺北市 (optional)
+    + address_city: 中山區 (optional)
+    + address_detail: 南京東路一段300巷300號6樓 (optional)
+    + address_zip_code: 104 (optional)
+    + phone_number: +886912345678 (optional)
+    + `security_id`: A12345678 (optional)
+    + nickname: 小明 (optional)
+    + title: 工程師 (optional) (optional)
+    + legal_name: 報導者文化基金會 (optional)
+    + gender: M (optional)  
+    + age_range: 25_to_34 (optional) 
+    + read_preference: human_right,cross_straits (optional)
+    + words_for_twreporter: 加油！(optional)  
++ receipt (optional)
+    + header: 王小明 (optional)
+    + security_id: A12345678 (optional)
+    + email: developer@twreporter.org (optional)
+    + address_country: 臺灣 (optional)
+    + address_state: 臺北市 (optional)
+    + address_city: 中山區 (optional)
+    + address_detail: 南京東路一段300巷300號6樓 (optional)
+    + address_zip_code: 104 (optional)
++ auto_tax_deduction: true (optional)
+
+### PeriodicDonationResponse
++ status: success (required)
++ data (PeriodicDonationModel)
